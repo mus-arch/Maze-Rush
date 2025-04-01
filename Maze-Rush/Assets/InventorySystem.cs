@@ -1,184 +1,166 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Nodig voor Sprite en GUI-functionaliteit
-// Nodig voor Sprite en GUI-functionaliteit
-
-// Dit is een eenvoudige inventarisbeheerklasse in Unity, geschreven in C#.
-// Het script beheert een lijst van items, hun hoeveelheden en een visuele weergave via een GUI.
-
-public class InventorySystem : MonoBehaviour // MonoBehaviour maakt dit een Unity-component
+public class InventorySystem : MonoBehaviour
 {
-    // Inventory Item class om eigenschappen van een item te definiëren
-    [System.Serializable] // Maakt de klasse zichtbaar in de Unity Inspector
+    // Inventory Item class to define item properties
+    [System.Serializable]
     public class InventoryItem
     {
-        public string itemName; // Naam van het item (bijv. "Sword", "Potion")
-        public int quantity;    // Huidige hoeveelheid van het item
-        public int maxStack;    // Maximale stapelgrootte voor dit item
-        public Sprite icon;     // Visueel icoon van het item voor de GUI
+        public string itemName;
+        public int quantity;
+        public int maxStack;
+        public Sprite icon;
 
-        // Constructor om een nieuw item te maken met basiswaarden
         public InventoryItem(string name, int max, Sprite sprite)
         {
-            itemName = name;     // Stel de naam in
-            quantity = 1;        // Begin met 1 item
-            maxStack = max;      // Stel de maximale stapelgrootte in
-            icon = sprite;       // Koppel het visuele icoon
+            itemName = name;
+            quantity = 1;
+            maxStack = max;
+            icon = sprite;
         }
     }
 
-    // Variabelen voor het inventarisbeheer
-    public List<InventoryItem> inventory = new List<InventoryItem>(); // Lijst van items in de inventaris
-    public int maxSlots = 20; // Maximum aantal slots in de inventaris
-    private bool showInventory = false; // Boolean om te bepalen of de inventaris GUI getoond wordt
+    // Inventory variables
+    public List<InventoryItem> inventory = new List<InventoryItem>();
+    public int maxSlots = 20;
+    private bool showInventory = false;
 
-    // Voorbeeldsprites voor items (moeten worden toegewezen in de Unity Inspector)
-    public Sprite swordSprite;  // Icoon voor het zwaard
-    public Sprite potionSprite; // Icoon voor de potion
-    public Sprite coinSprite;   // Icoon voor de munt
+    // Example item sprites (assign in Inspector)
+    public Sprite swordSprite;
+    public Sprite potionSprite;
+    public Sprite coinSprite;
 
-    // Start wordt aangeroepen bij het laden van het script in de scène
     void Start()
     {
-        // Voeg testitems toe om de inventaris te initialiseren
-        AddItem("Sword", 1, swordSprite);   // Voeg 1 zwaard toe
-        AddItem("Potion", 10, potionSprite); // Voeg 10 potions toe (max stapel is 10)
-        AddItem("Coin", 99, coinSprite);    // Voeg 99 munten toe (max stapel is 99)
+        // Add some test items
+        AddItem("Sword", 1, swordSprite);
+        AddItem("Potion", 10, potionSprite);
+        AddItem("Coin", 99, coinSprite);
     }
 
-    // Update wordt elke frame aangeroepen
     void Update()
     {
-        // Schakel de inventarisweergave aan/uit met de 'I'-toets
+        // Toggle inventory with 'I' key
         if (Input.GetKeyDown(KeyCode.I))
         {
-            showInventory = !showInventory; // Wissel de waarde van showInventory (true/false)
+            showInventory = !showInventory;
         }
     }
 
-    // Functie om een item aan de inventaris toe te voegen
+    // Add item to inventory
     public bool AddItem(string itemName, int amount, Sprite icon)
     {
-        // Controleer eerst of het item al bestaat en gestapeld kan worden
+        // Check if item already exists and can be stacked
         foreach (InventoryItem item in inventory)
         {
-            if (item.itemName == itemName && item.quantity < item.maxStack) // Als naam overeenkomt en er ruimte is
+            if (item.itemName == itemName && item.quantity < item.maxStack)
             {
-                int spaceLeft = item.maxStack - item.quantity; // Bereken hoeveel ruimte er nog is
-                item.quantity += Mathf.Min(amount, spaceLeft); // Voeg toe, maar niet meer dan maxStack
-                return true; // Item succesvol toegevoegd
+                int spaceLeft = item.maxStack - item.quantity;
+                item.quantity += Mathf.Min(amount, spaceLeft);
+                return true;
             }
         }
 
-        // Als het item niet gestapeld kan worden en er ruimte is, voeg een nieuw item toe
+        // If inventory isn't full, add new item
         if (inventory.Count < maxSlots)
         {
-            inventory.Add(new InventoryItem(itemName, amount, icon)); // Maak en voeg nieuw item toe
-            return true; // Item succesvol toegevoegd
+            inventory.Add(new InventoryItem(itemName, amount, icon));
+            return true;
         }
 
-        Debug.Log("Inventory full!"); // Log een bericht als de inventaris vol is
-        return false; // Toevoegen mislukt
+        Debug.Log("Inventory full!");
+        return false;
     }
 
-    // Functie om een item uit de inventaris te verwijderen
+    // Remove item from inventory
     public void RemoveItem(string itemName, int amount)
     {
-        // Loop achterwaarts door de lijst om veilig te kunnen verwijderen
         for (int i = inventory.Count - 1; i >= 0; i--)
         {
-            if (inventory[i].itemName == itemName) // Vind het item met de juiste naam
+            if (inventory[i].itemName == itemName)
             {
-                inventory[i].quantity -= amount; // Verminder de hoeveelheid
-                if (inventory[i].quantity <= 0) // Als de hoeveelheid 0 of minder is
+                inventory[i].quantity -= amount;
+                if (inventory[i].quantity <= 0)
                 {
-                    inventory.RemoveAt(i); // Verwijder het item volledig uit de lijst
+                    inventory.RemoveAt(i);
                 }
-                return; // Stop na het vinden en verwerken van het item
+                return;
             }
         }
     }
 
-    // Functie om de inventaris GUI te tekenen
+    // Draw inventory UI
     void OnGUI()
     {
-        if (!showInventory) return; // Als showInventory false is, teken niets
+        if (!showInventory) return;
 
-        // Teken een achtergrondvak voor de inventaris
+        // Inventory window
         GUI.Box(new Rect(10, 10, 300, 400), "Inventory");
 
-        // Startpositie voor het weergeven van items
+        // Display items
         int yPos = 40;
-
-        // Loop door alle items en toon ze
         for (int i = 0; i < inventory.Count; i++)
         {
-            // Teken het itemicoon als het bestaat
+            // Item icon
             if (inventory[i].icon != null)
             {
-                GUI.DrawTexture(new Rect(20, yPos, 32, 32), inventory[i].icon.texture); // Teken het icoon
+                GUI.DrawTexture(new Rect(20, yPos, 32, 32), inventory[i].icon.texture);
             }
 
-            // Toon de naam en hoeveelheid van het item
+            // Item name and quantity
             GUI.Label(new Rect(60, yPos + 8, 200, 20),
                 $"{inventory[i].itemName} x{inventory[i].quantity}");
 
-            // Voeg een verwijderknop toe voor elk item
+            // Remove button
             if (GUI.Button(new Rect(220, yPos + 4, 70, 20), "Remove"))
             {
-                RemoveItem(inventory[i].itemName, 1); // Verwijder 1 van dit item bij klikken
+                RemoveItem(inventory[i].itemName, 1);
             }
 
-            yPos += 35; // Verhoog de verticale positie voor het volgende item
+            yPos += 35;
         }
 
-        // Extra ruimte voor testknoppen
+        // Add item test buttons
         yPos += 20;
-
-        // Knop om een zwaard toe te voegen
         if (GUI.Button(new Rect(20, yPos, 100, 20), "Add Sword"))
         {
-            AddItem("Sword", 1, swordSprite); // Voeg 1 zwaard toe bij klikken
+            AddItem("Sword", 1, swordSprite);
         }
-
-        // Knop om een potion toe te voegen
         if (GUI.Button(new Rect(130, yPos, 100, 20), "Add Potion"))
         {
-            AddItem("Potion", 1, potionSprite); // Voeg 1 potion toe bij klikken
+            AddItem("Potion", 1, potionSprite);
         }
-
-        // Knop om een munt toe te voegen
         if (GUI.Button(new Rect(240, yPos, 100, 20), "Add Coin"))
         {
-            AddItem("Coin", 1, coinSprite); // Voeg 1 munt toe bij klikken
+            AddItem("Coin", 1, coinSprite);
         }
     }
 
-    // Controleer of een item in de inventaris bestaat met een minimale hoeveelheid
+    // Check if item exists in inventory
     public bool HasItem(string itemName, int amount = 1)
     {
         foreach (InventoryItem item in inventory)
         {
-            if (item.itemName == itemName && item.quantity >= amount) // Als naam en hoeveelheid kloppen
+            if (item.itemName == itemName && item.quantity >= amount)
             {
-                return true; // Item gevonden
+                return true;
             }
         }
-        return false; // Item niet gevonden
+        return false;
     }
 
-    // Haal de totale hoeveelheid van een specifiek item op
+    // Get total quantity of an item
     public int GetItemCount(string itemName)
     {
         foreach (InventoryItem item in inventory)
         {
-            if (item.itemName == itemName) // Als het item gevonden is
+            if (item.itemName == itemName)
             {
-                return item.quantity; // Geef de hoeveelheid terug
+                return item.quantity;
             }
         }
-        return 0; // Item niet gevonden, geef 0 terug
+        return 0;
     }
 }
