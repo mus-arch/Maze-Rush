@@ -14,6 +14,8 @@ public class GameMenuController : MonoBehaviour
     {
         SceneManager.LoadScene("Creaters Menu");
     }
+
+    public void StartQuitMenu()
     // Functie om terug te keren naar het hoofdmenu
     public void ReturnToMainMenu()
     {
