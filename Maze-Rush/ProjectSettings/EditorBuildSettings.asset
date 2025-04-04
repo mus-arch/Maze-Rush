@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Creaters Menu.unity
     guid: 79f4b5db70b69f2489b0b1945def97df
   - enabled: 1
+    path: Assets/Game Options.unity
+    guid: 4025eb714654e9142b372594417c7574
+  - enabled: 1
     path: Assets/Quit Menu.unity
     guid: 1bffa8014585c654ea445b036f421684
   m_configObjects: {}
