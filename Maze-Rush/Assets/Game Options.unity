@@ -1277,8 +1277,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: Button
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 4483040742387718681, guid: 8efab0db3f8e2cf458d7fce0f5cafc78, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -1299,7 +1298,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb0b069dc6c952748a75fb17cf1ba971, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 861853905285183908, guid: d4698bd7e275ec54da5f14f1f43fb3c7, type: 3}
+  saveButton: {fileID: 0}
+  continueButton: {fileID: 0}
+  newGameButton: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

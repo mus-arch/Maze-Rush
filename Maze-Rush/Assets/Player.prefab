@@ -267,6 +267,7 @@ GameObject:
   - component: {fileID: 861853905285183908}
   - component: {fileID: 249773195872444237}
   - component: {fileID: 5974371926734895933}
+  - component: {fileID: 883487269245513393}
   - component: {fileID: 1777941143450054179}
   - component: {fileID: 6145884834106493110}
   - component: {fileID: 4868593173106543765}
@@ -343,6 +344,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &883487269245513393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4816648544399505008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb0b069dc6c952748a75fb17cf1ba971, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  saveButton: {fileID: 293894106722251188, guid: 8efab0db3f8e2cf458d7fce0f5cafc78,
+    type: 3}
+  continueButton: {fileID: 7941308715325007690, guid: acf31e7cb2f9e5a449c6f448bf8ff6bf,
+    type: 3}
+  newGameButton: {fileID: 7753189423907331546, guid: 039ef8b936b1dae49b9ffe66706f7067,
+    type: 3}
 --- !u!65 &1777941143450054179
 BoxCollider:
   m_ObjectHideFlags: 0
